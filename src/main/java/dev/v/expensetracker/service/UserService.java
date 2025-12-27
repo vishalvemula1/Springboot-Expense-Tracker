@@ -30,21 +30,10 @@ public class UserService {
 
     }
 
-    @Transactional
-    public UserResponse createUser(UserCreateRequest dto) {
-        User user = userMapper.toEntity(dto);
-
-        String encodedPassword = passwordEncoder.encode(dto.getPassword());
-        user.setPasswordHash(encodedPassword);
-
-        userRepository.save(user);
-
-        return userMapper.toResponseDTO(user);
-    }
 
     @Transactional
-    public UserResponse updateUser(Long id, UserUpdateRequest dto) {
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+    public UserResponse updateUser(Long userId, UserUpdateRequest dto) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(User.class, "id", userId));
 
         userMapper.updateEntityFromDTO(dto, user);
 
@@ -60,13 +49,13 @@ public class UserService {
     }
 
     @Transactional
-    public void deleteUser(Long id) {
-        userRepository.deleteById(id);
+    public void deleteUser(Long userId) {
+        userRepository.deleteById(userId);
     }
 
     @Transactional
-    public UserResponse readUser(Long id) {
-        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
+    public UserResponse readUser(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(User.class, "id", userId));
 
         return userMapper.toResponseDTO(user);
     }

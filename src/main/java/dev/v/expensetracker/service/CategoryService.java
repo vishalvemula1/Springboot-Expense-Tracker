@@ -29,7 +29,7 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse createCategory(Long userId, CategoryCreateRequest dto) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(User.class, "id", userId));
 
         Category category = categoryMapper.toEntity(dto);
         category.setUser(user);
@@ -44,7 +44,7 @@ public class CategoryService {
     public CategoryResponse updateCategory(Long categoryId,
                                            CategoryUpdateRequest dto) {
 
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", categoryId));
         categoryMapper.updateEntityFromDTO(dto, category);
 
         categoryRepository.save(category);
@@ -59,7 +59,7 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse readCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", categoryId));
 
         return categoryMapper.toResponseDTO(category);
     }

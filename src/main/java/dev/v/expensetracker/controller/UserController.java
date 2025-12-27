@@ -1,12 +1,9 @@
 package dev.v.expensetracker.controller;
 
-import dev.v.expensetracker.dto.userDTO.UserCreateRequest;
 import dev.v.expensetracker.dto.userDTO.UserResponse;
 import dev.v.expensetracker.dto.userDTO.UserUpdateRequest;
 import dev.v.expensetracker.service.UserService;
 import jakarta.validation.Valid;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -16,11 +13,6 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
-    }
-
-    @PostMapping("/")
-    public UserResponse createUser(@Valid @RequestBody UserCreateRequest request) {
-        return userService.createUser(request);
     }
 
     @PutMapping("/{userId}")

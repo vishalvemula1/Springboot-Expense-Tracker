@@ -50,3 +50,4 @@ application-local.yml
 application-dev.properties
 application-dev.yml
 
+FLYWAY_FIX.md
