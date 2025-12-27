@@ -3,6 +3,8 @@ package dev.v.expensetracker.controller;
 
 import dev.v.expensetracker.dto.userDTO.UserCreateRequest;
 import dev.v.expensetracker.dto.userDTO.UserResponse;
+import dev.v.expensetracker.security.JwtResponse;
+import dev.v.expensetracker.security.LoginRequest;
 import dev.v.expensetracker.service.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.PostMapping;

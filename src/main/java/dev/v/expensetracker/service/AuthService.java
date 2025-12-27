@@ -1,7 +1,7 @@
 package dev.v.expensetracker.service;
 
-import dev.v.expensetracker.controller.JwtResponse;
-import dev.v.expensetracker.controller.LoginRequest;
+import dev.v.expensetracker.security.JwtResponse;
+import dev.v.expensetracker.security.LoginRequest;
 import dev.v.expensetracker.dto.userDTO.UserCreateRequest;
 import dev.v.expensetracker.dto.userDTO.UserResponse;
 import dev.v.expensetracker.entity.User;

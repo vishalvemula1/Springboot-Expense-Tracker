@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long> {
-    Optional<Expense> findByExpenseIdAndUserId(Long userId, Long expenseId);
+    Optional<Expense> findByUserUserIdAndExpenseId(Long userId, Long expenseId);
 
     List<Expense> findByUserUserId(Long userId);
 }

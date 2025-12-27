@@ -1,3 +1,3 @@
-package dev.v.expensetracker.controller;
+package dev.v.expensetracker.security;
 
 public record JwtResponse(String token) {}

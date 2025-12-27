@@ -42,7 +42,7 @@ public class ExpenseService {
 
         Category category;
         if (dto.getCategoryId() != null) {
-            category = categoryRepository.findByCategoryIdAndUserId(userId, dto.getCategoryId())
+            category = categoryRepository.findByUserUserIdAndCategoryId(userId, dto.getCategoryId())
                     .orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", dto.getCategoryId()));
         }
         else {
@@ -65,14 +65,14 @@ public class ExpenseService {
                                          Long expenseId,
                                          ExpenseUpdateRequest dto) {
 
-        Expense expense = expenseRepository.findByExpenseIdAndUserId(userId, expenseId)
+        Expense expense = expenseRepository.findByUserUserIdAndExpenseId(userId, expenseId)
                 .orElseThrow(() -> new ResourceNotFoundException(Expense.class, "id", expenseId));
 
         expenseMapper.updateEntityFromDTO(dto, expense);
 
         if (dto.getCategoryId() != null) {
 
-            Category category = categoryRepository.findByCategoryIdAndUserId(userId, dto.getCategoryId())
+            Category category = categoryRepository.findByUserUserIdAndCategoryId(userId, dto.getCategoryId())
                     .orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", dto.getCategoryId()));
 
             expense.setCategory(category);
@@ -87,7 +87,7 @@ public class ExpenseService {
     @Transactional
     public void deleteExpense(Long userId,
                               Long expenseId) {
-        Expense expense = expenseRepository.findByExpenseIdAndUserId(userId, expenseId)
+        Expense expense = expenseRepository.findByUserUserIdAndExpenseId(userId, expenseId)
                         .orElseThrow(() -> new ResourceNotFoundException(Expense.class, "id", expenseId));
 
         expenseRepository.deleteById(expenseId);
@@ -96,7 +96,7 @@ public class ExpenseService {
     @Transactional
     public ExpenseResponse readExpense(Long userId,
                                        Long expenseId) {
-        Expense expense = expenseRepository.findByExpenseIdAndUserId(userId, expenseId)
+        Expense expense = expenseRepository.findByUserUserIdAndExpenseId(userId, expenseId)
                 .orElseThrow(() -> new ResourceNotFoundException(Expense.class, "id", expenseId));
 
         return expenseMapper.toResponseDTO(expense);

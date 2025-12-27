@@ -21,7 +21,6 @@ public class UserMapper {
         dto.setEmail(user.getEmail());
         dto.setCreatedAt(user.getCreatedAt());
         dto.setUpdatedAt(user.getCreatedAt());
-        dto.setUpdatedAt(user.getUpdatedAt());
 
         return dto;
     }

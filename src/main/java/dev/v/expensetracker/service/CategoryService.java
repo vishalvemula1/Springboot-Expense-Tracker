@@ -46,7 +46,7 @@ public class CategoryService {
                                            Long categoryId,
                                            CategoryUpdateRequest dto) {
 
-        Category category = categoryRepository.findByCategoryIdAndUserId(userId, categoryId)
+        Category category = categoryRepository.findByUserUserIdAndCategoryId(userId, categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", categoryId));
         categoryMapper.updateEntityFromDTO(dto, category);
 
@@ -58,7 +58,7 @@ public class CategoryService {
     @Transactional
     public void deleteCategory(Long userId,
                                Long categoryId) {
-        Category category = categoryRepository.findByCategoryIdAndUserId(userId, categoryId)
+        Category category = categoryRepository.findByUserUserIdAndCategoryId(userId, categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", categoryId));
 
         categoryRepository.deleteById(category.getCategoryId());
@@ -67,7 +67,7 @@ public class CategoryService {
     @Transactional
     public CategoryResponse readCategory(Long userId,
                                          Long categoryId) {
-        Category category = categoryRepository.findByCategoryIdAndUserId(userId, categoryId)
+        Category category = categoryRepository.findByUserUserIdAndCategoryId(userId, categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", categoryId));
 
         return categoryMapper.toResponseDTO(category);

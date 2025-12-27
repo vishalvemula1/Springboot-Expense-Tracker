@@ -18,7 +18,7 @@ public class CategoryMapper {
         dto.setDescription(category.getDescription());
         dto.setCreatedAt(category.getCreatedAt());
         dto.setUpdatedAt(category.getUpdatedAt());
-        dto.setCategoryId(category.getUser().getUserId());
+        dto.setUserId(category.getUser().getUserId());
 
         return dto;
     }

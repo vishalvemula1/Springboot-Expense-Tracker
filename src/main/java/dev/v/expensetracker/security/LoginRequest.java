@@ -1,3 +1,3 @@
-package dev.v.expensetracker.controller;
+package dev.v.expensetracker.security;
 
 public record LoginRequest(String username, String password) {}
