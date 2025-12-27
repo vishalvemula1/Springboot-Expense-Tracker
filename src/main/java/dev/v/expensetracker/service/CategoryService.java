@@ -5,6 +5,7 @@ import dev.v.expensetracker.dto.categoryDTO.CategoryResponse;
 import dev.v.expensetracker.dto.categoryDTO.CategoryUpdateRequest;
 import dev.v.expensetracker.entity.Category;
 import dev.v.expensetracker.entity.User;
+import dev.v.expensetracker.exception.ResourceNotFoundException;
 import dev.v.expensetracker.mapper.CategoryMapper;
 import dev.v.expensetracker.repository.CategoryRepository;
 import dev.v.expensetracker.repository.UserRepository;
@@ -28,7 +29,7 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse createCategory(Long userId, CategoryCreateRequest dto) {
-        User user = userRepository.findById(userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User", "id", userId));
 
         Category category = categoryMapper.toEntity(dto);
         category.setUser(user);
@@ -43,7 +44,7 @@ public class CategoryService {
     public CategoryResponse updateCategory(Long categoryId,
                                            CategoryUpdateRequest dto) {
 
-        Category category = categoryRepository.findById(categoryId);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
         categoryMapper.updateEntityFromDTO(dto, category);
 
         categoryRepository.save(category);
@@ -58,7 +59,7 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse readCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId);
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException("Category", "id", categoryId));
 
         return categoryMapper.toResponseDTO(category);
     }

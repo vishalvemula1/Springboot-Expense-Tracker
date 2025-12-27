@@ -3,7 +3,6 @@ package dev.v.expensetracker.controller;
 import dev.v.expensetracker.dto.categoryDTO.CategoryCreateRequest;
 import dev.v.expensetracker.dto.categoryDTO.CategoryResponse;
 import dev.v.expensetracker.dto.categoryDTO.CategoryUpdateRequest;
-import dev.v.expensetracker.repository.CategoryRepository;
 import dev.v.expensetracker.service.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -19,7 +18,7 @@ public class CategoryController {
     }
 
     @PostMapping("/")
-    public CategoryRepository createCategory(@PathVariable Long userId,
+    public CategoryResponse createCategory(@PathVariable Long userId,
                                              @Valid @RequestBody CategoryCreateRequest dto) {
         return categoryService.createCategory(userId, dto);
     }

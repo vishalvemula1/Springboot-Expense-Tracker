@@ -4,6 +4,7 @@ import dev.v.expensetracker.dto.userDTO.UserCreateRequest;
 import dev.v.expensetracker.dto.userDTO.UserResponse;
 import dev.v.expensetracker.dto.userDTO.UserUpdateRequest;
 import dev.v.expensetracker.entity.User;
+import dev.v.expensetracker.exception.ResourceNotFoundException;
 import dev.v.expensetracker.mapper.UserMapper;
 import dev.v.expensetracker.repository.UserRepository;
 
@@ -43,7 +44,7 @@ public class UserService {
 
     @Transactional
     public UserResponse updateUser(Long id, UserUpdateRequest dto) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 
         userMapper.updateEntityFromDTO(dto, user);
 
@@ -65,7 +66,7 @@ public class UserService {
 
     @Transactional
     public UserResponse readUser(Long id) {
-        User user = userRepository.findById(id);
+        User user = userRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User", "id", id));
 
         return userMapper.toResponseDTO(user);
     }
