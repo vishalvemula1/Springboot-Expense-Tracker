@@ -29,7 +29,8 @@ public class CategoryService {
 
     @Transactional
     public CategoryResponse createCategory(Long userId, CategoryCreateRequest dto) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(User.class, "id", userId));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(User.class, "id", userId));
 
         Category category = categoryMapper.toEntity(dto);
         category.setUser(user);
@@ -41,10 +42,12 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryResponse updateCategory(Long categoryId,
+    public CategoryResponse updateCategory(Long userId,
+                                           Long categoryId,
                                            CategoryUpdateRequest dto) {
 
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", categoryId));
+        Category category = categoryRepository.findByCategoryIdAndUserId(userId, categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", categoryId));
         categoryMapper.updateEntityFromDTO(dto, category);
 
         categoryRepository.save(category);
@@ -53,13 +56,19 @@ public class CategoryService {
     }
 
     @Transactional
-    public void deleteCategory(Long categoryId) {
-        categoryRepository.deleteById(categoryId);
+    public void deleteCategory(Long userId,
+                               Long categoryId) {
+        Category category = categoryRepository.findByCategoryIdAndUserId(userId, categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", categoryId));
+
+        categoryRepository.deleteById(category.getCategoryId());
     }
 
     @Transactional
-    public CategoryResponse readCategory(Long categoryId) {
-        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", categoryId));
+    public CategoryResponse readCategory(Long userId,
+                                         Long categoryId) {
+        Category category = categoryRepository.findByCategoryIdAndUserId(userId, categoryId)
+                .orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", categoryId));
 
         return categoryMapper.toResponseDTO(category);
     }

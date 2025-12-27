@@ -3,12 +3,14 @@ package dev.v.expensetracker.controller;
 import dev.v.expensetracker.dto.categoryDTO.CategoryCreateRequest;
 import dev.v.expensetracker.dto.categoryDTO.CategoryResponse;
 import dev.v.expensetracker.dto.categoryDTO.CategoryUpdateRequest;
+import dev.v.expensetracker.security.CustomUserDetails;
 import dev.v.expensetracker.service.CategoryService;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/users/{userId}/categories/")
+@RequestMapping("/me/categories/")
 public class CategoryController {
 
     private final CategoryService categoryService;
@@ -18,24 +20,31 @@ public class CategoryController {
     }
 
     @PostMapping("/")
-    public CategoryResponse createCategory(@PathVariable Long userId,
-                                             @Valid @RequestBody CategoryCreateRequest dto) {
+    public CategoryResponse createCategory(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                           @Valid @RequestBody CategoryCreateRequest dto) {
+        Long userId = userDetails.getUser().getUserId();
         return categoryService.createCategory(userId, dto);
     }
 
     @PutMapping("/{categoryId}")
-    public CategoryResponse updateCategory(@PathVariable Long categoryId,
+    public CategoryResponse updateCategory(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                           @PathVariable Long categoryId,
                                            @Valid @RequestBody CategoryUpdateRequest dto) {
-        return categoryService.updateCategory(categoryId, dto);
+        Long userId = userDetails.getUser().getUserId();
+        return categoryService.updateCategory(userId, categoryId, dto);
     }
 
     @GetMapping("/{categoryId}")
-    public CategoryResponse getCategory(@PathVariable Long categoryId) {
-        return categoryService.readCategory(categoryId);
+    public CategoryResponse getCategory(@AuthenticationPrincipal CustomUserDetails userDetails,
+                                        @PathVariable Long categoryId) {
+        Long userId = userDetails.getUser().getUserId();
+        return categoryService.readCategory(userId, categoryId);
     }
 
     @DeleteMapping("/{categoryId}")
-    public void deleteCategory(@PathVariable Long categoryId) {
-        categoryService.deleteCategory(categoryId);
+    public void deleteCategory(@AuthenticationPrincipal CustomUserDetails userDetails,
+                               @PathVariable Long categoryId) {
+        Long userId = userDetails.getUser().getUserId();
+        categoryService.deleteCategory(userId, categoryId);
     }
 }

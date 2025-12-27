@@ -35,15 +35,19 @@ public class ExpenseService {
 
 
     @Transactional
-    public ExpenseResponse createExpense(Long userId, ExpenseCreateRequest dto) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException(User.class, "id", userId));
+    public ExpenseResponse createExpense(Long userId,
+                                         ExpenseCreateRequest dto) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new ResourceNotFoundException(User.class, "id", userId));
 
         Category category;
         if (dto.getCategoryId() != null) {
-            category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", dto.getCategoryId()));
+            category = categoryRepository.findByCategoryIdAndUserId(userId, dto.getCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", dto.getCategoryId()));
         }
         else {
-            category = categoryRepository.findByUserUserIdAndIsDefaultTrue(userId).orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", dto.getCategoryId()));
+            category = categoryRepository.findByUserUserIdAndIsDefaultTrue(userId)
+                    .orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", dto.getCategoryId()));
         }
 
         Expense expense = expenseMapper.toEntity(dto);
@@ -57,13 +61,20 @@ public class ExpenseService {
     }
 
     @Transactional
-    public ExpenseResponse updateExpense(Long expenseId, ExpenseUpdateRequest dto) {
-        Expense expense = expenseRepository.findById(expenseId).orElseThrow(() -> new ResourceNotFoundException(Expense.class, "id", expenseId));
+    public ExpenseResponse updateExpense(Long userId,
+                                         Long expenseId,
+                                         ExpenseUpdateRequest dto) {
+
+        Expense expense = expenseRepository.findByExpenseIdAndUserId(userId, expenseId)
+                .orElseThrow(() -> new ResourceNotFoundException(Expense.class, "id", expenseId));
 
         expenseMapper.updateEntityFromDTO(dto, expense);
 
         if (dto.getCategoryId() != null) {
-            Category category = categoryRepository.findById(dto.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", dto.getCategoryId()));
+
+            Category category = categoryRepository.findByCategoryIdAndUserId(userId, dto.getCategoryId())
+                    .orElseThrow(() -> new ResourceNotFoundException(Category.class, "id", dto.getCategoryId()));
+
             expense.setCategory(category);
         }
 
@@ -74,13 +85,19 @@ public class ExpenseService {
     }
 
     @Transactional
-    public void deleteExpense(Long expenseId) {
+    public void deleteExpense(Long userId,
+                              Long expenseId) {
+        Expense expense = expenseRepository.findByExpenseIdAndUserId(userId, expenseId)
+                        .orElseThrow(() -> new ResourceNotFoundException(Expense.class, "id", expenseId));
+
         expenseRepository.deleteById(expenseId);
     }
 
     @Transactional
-    public ExpenseResponse readExpense(Long expenseId) {
-        Expense expense = expenseRepository.findById(expenseId).orElseThrow(() -> new ResourceNotFoundException(Expense.class, "id", expenseId));
+    public ExpenseResponse readExpense(Long userId,
+                                       Long expenseId) {
+        Expense expense = expenseRepository.findByExpenseIdAndUserId(userId, expenseId)
+                .orElseThrow(() -> new ResourceNotFoundException(Expense.class, "id", expenseId));
 
         return expenseMapper.toResponseDTO(expense);
     }
